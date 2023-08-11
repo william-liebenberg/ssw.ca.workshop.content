@@ -1,0 +1,13 @@
+# Step 3: Commit to organising code by layers
+Now that we've got a domain model that makes a little more sense, let's start organising our code so that we can enforce the direction of dependencies.
+
+1. Add a class library project called `Infrastructure`.
+2. Add the EF Core dependencies from `Presentation` to this project (Design and SQLServer).
+3. Make the `Infrastructure` project depend on the `Domain` project.
+4. Move the `Data` and `Migrations` folders from `Presentation` to `Infrastructure`.
+5. Update the namespaces in the classes in the `Data` and `Migration` folders:
+    - `SpaghettiCommerce.Data` => `SpaghettiCommerce.Infrastructure.Data`
+    - `SpaghettiCommerce.Migrations` => `SpaghettiCommerce.Infrastructure.Migrations`
+7. In the `Presentation` project, update all the references to these classes to use the new namespace.
+
+Build and run the solution now to make sure it still works before moving on to the next step.

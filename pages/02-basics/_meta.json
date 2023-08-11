@@ -1,0 +1,9 @@
+{
+    "intro": "Introduction",
+    "step1": "Step1: Separate the solution into layers",
+    "step2": "Step2: Begin knowledge consolidation",
+    "step3": "Step3: Commit to organising code by layers",
+    "step4": "Step4: Separate application and persistence logic",
+    "step5": "Step5: Implement Infrastructure services",
+    "step6": "Step6: Update the Presentation project"
+}

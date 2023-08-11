@@ -1,0 +1,29 @@
+# Step 6: Update the Presentation project
+There are a few steps required to finish our refactor and these are all in the `Presentation` project.
+
+1. Ensure the folders we are not using anymore, plus their contents, have been deleted:
+    - Data
+    - Migrations
+    - Models
+    - Products
+    - Services
+2. In each controller, update the actions to return the appropriate DTO.
+3. In each controller, remove the `DbContext` (constructor injection and all references)/
+4. In each controller, inject the relevant required service.
+5. In each controller action, replace the current code with a call to the appropriate service method.
+
+At this point, the solution should build. If you get any errors, they will most likely be due to missed namespace updates, so resolve these.
+
+Finally, even though the app will build, it won't run at the moment because none of our services have registered implementations. Add these now to `Program.cs`. At the moment our `Presentation` project is the entry point so is responsible for registering all services, but you can split them up in the code to make it more readable and logical. A couple of options for doing this would be just grouping them logically using whitespace and adding comments to help people identify what's happening where (as we do in `LasagneCommerce`) or you could split them into #regions (🤮).
+
+## Next steps
+This completes our refactor. The new solution isn't perfect and has lots of technical debt and compromise. But it's a heckuva lot better than what we had before, and sets us up well for both adding new features or fixing bugs, as well as continued refactoring for improvement in the future. We should be aiming for roughly 20% of effort in every sprint to pay back technical debt, and here's some things we might add to the `LasagneCommerce` backlog for this:
+
+* Move service registration to each layer.
+* Move hard-coded magic strings to configuration and/or a secure secrets service like Key Vault.
+* Move payment to it's own library. Consider using some better patterns too, like a managed `HttpClient` instance, and define a type for the payment request body.
+* Consider using a library for email, like FluentEmail for example, and a better service than SMTP (e.g. Microsoft Graph or SendGrid).
+* Add authentication and a way for customers to register.
+* Address compiler warnings.
+
+Later, as we learn more about some of the patterns (e.g. CQRS) and QOL improvements (like the mediator pattern) that work well with Clean Architecture, we can continue to iterate on this and improve it even further.

@@ -1,0 +1,43 @@
+# Introduction
+
+Let's start by looking at a bad example. SpaghettiCommerce is an API for an e-Commerce solution that allows people search for and order products. The problem domain includes customers, products, carts, and orders.
+
+SpaghettiCommerce is a single project solution that started out simple, and has gotten tangled as its grown and people have added new code and new features, without following an architectural pattern. Let's have a look at some of the problems with SpaghettiCommerce (ignore the lack of authentication for now):
+
+> Note:
+> Walk through the code together & spot as many problems as possible
+
+* **Logic in the controllers**: Application logic is coupled with presentation logic
+* **DbContext in the controllers**: Persistence logic is coupled with presentation logic
+* **Inconsistent patterns**: Some controllers have services injected but this is not applied consistently
+* **Inconsistent organisation**: There is a mix of organisation by function and organisation by feature. Some services are in a Services folder (OrderService) whereas some are in a feature folder (ProductService).
+* **Massive DRY violations**: In the Models folder there is a class called Product. There is also a class called Product in the Products folder. One is used for orders and the other used for managing the list of products in the database. The references to them are muddled and problematic. Also, there are two ways to get a list of orders for a customer - one from the Customers controller and one from the Orders controller. They both use different approaches to getting the data.
+* **Missing logic**: The cart type has a total property, but this is not a computed value, and is not currently set anywhere.
+* **Broken logic due to inconsistencies**: In addition to the missing total, the updates to the cart are not saved after removing items.
+* **Domain models exposed externally**: The controllers currently return domain models and not DTOs.
+* **SRP violations**: The order service currently contains logic to process payments and send email notifications, as well as it's core functionality of processing orders.
+* **Hard coded magic strings**: The order service has a hard-coded URL for it's payment processor, as well as many hard-coded values for sending email. These should be in configuration and many of them are secrets.
+
+## Refactoring SpaghettiCommerce
+
+We can refactor the tangle of SpaghettiCommerce into layers to follow the principles of Clean Architecture. Note that the name SpaghettiCommerce is illustrative, so in the refactored version we have renamed it to LasagneCommerce, but this name change is not necessary (it's just used to distinguish the two different versions).
+
+### How to run?
+
+```
+docker compose up
+```
+
+and
+
+```
+dotnet run
+```
+
+
+
+
+
+
+
+

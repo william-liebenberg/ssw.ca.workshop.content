@@ -1,0 +1,18 @@
+# Step 2: Begin knowledge consolidation
+In this step we'll start to address the DRY problems in SpaghettiCommerce.
+
+> **Note**
+> The following works for refactoring the code, however, with a deployed product, data migration will also be a concern (skipped for the workshop). The data spread across the two tables would need to be consolidated. This refactor focuses purely on the architecture and does not include this data migrations.
+
+1. `SpaghettiCommerce.Domain.Models.Product` is almost identical to `OrderItem`. Meanwhile `SpaghettiCommerce.Products.Product` contains actual product information. Replace the properties in `Domain.Models.Product` with the properties of the `Product` class in `Presentation`.
+2. Delete the `Product` class from `Presentation`.
+3. Delete the unnecessary `using` statements from `AppDbContext`, i.e.:
+```csharp
+using OrderProduct = SpaghettiCommerce.Domain.Models.Product;
+using Product = SpaghettiCommerce.Products.Product;
+```
+4. Delete the `Products` `DbSet` from `AppDbContext`.
+4. Rename `CatalogProducts` to `Products`.
+5. Fix up the `ProductService`:
+    - add the missing namespace for domain models
+    - Fix the `DbSet` name (`CatalogProducts` => `Products`)

@@ -1,0 +1,121 @@
+# Step 4: Separate application and persistence logic
+At the moment, all of our logic for saving and retrieving data is tied up together. We'll keep logic for saving and retrieving data in the Infrastructure layer, but move application logic to the Application layer.
+
+There are a few ways we could organise our Application layer, and these can sometimes depend on other patterns (for example, CQRS, which we'll see later in the course). For now, as we are focusing on just the core of the Clean Architecture principles, we'll just organise the code by feature use an approach which will make it easy to add or change code in the future. Our application project will follow this pattern:
+
+```
+{{Feature}}/
+│
+├── Abstractions/
+│   ├── IFeatureRepository.cs
+│   └── IFeatureService.cs
+│
+├── DTOs/
+│   ├── FeatureDto1.cs
+│   └── FeatureDto2.cs
+│
+├── Mappings/
+│   └── FeatureMappings.cs
+│
+└── Services/
+    └── FeatureService.cs
+```
+
+Let's talk a little about what's going on here. Firstly, this represents the structure for any given feature (or more accurately in this case, domain area). So we will create this structure for `Products` (bonus afterwards for `Carts`, `Customers` and `Orders` - tip, pull from 1.1 SpaghettiCommerce). Each area has four folders:
+
+* **Abstractions**: This contains two interfaces defining functionality related to this feature:
+    - A repository that defines logic for how this feature needs to interact with the persistence engine
+    - A service that defines application logic related to this feature
+* **DTOs**: This folder will contain DTOs that can be exposed externally, containing precisely the properties needed by external consumers of the API.
+* **Mappings**: This folder will contain a class that defines how domain models should be mapped to DTOs.
+* **Services**: This folder will contain the implementation of the application logic for this feature, as defined in the `Abstractions` folder.
+
+These folders will all look roughly similar. They may have different numbers of DTOs depending on the needs of the feature or area.
+
+One notable difference to call out is the `Orders` folder. Currently, the ordering functionality in the `Presentation` project includes logic for payment processing and email. We'll split this out and define abstractions in the `Orders` folder for payment processing and email notification. Additionally, Customers does not need to define a repository as it only contains logic for orders, which we can get from the orders repository.
+
+1. Add a class library project called `Application`.
+2. Add the folder structure defined above, and add classes as per the following tree:
+
+```
+Products/
+│
+├── Abstractions/
+│   ├── IProductRepository.cs
+│   └── IProductService.cs
+│
+├── DTOs/
+│   └── ProductDto.cs
+│
+├── Mappings/
+│   └── ProductMappings.cs
+│
+└── Services/
+    └── ProductService.cs
+```
+
+<details>
+
+<summary>Bonus</summary>
+
+```
+Carts/
+│
+├── Abstractions/
+│   ├── ICartRepository.cs
+│   └── ICartService.cs
+│
+├── DTOs/
+│   ├── CartDto.cs
+│   └── CartItemDto.cs
+│
+├── Mappings/
+│   └── CartMappings.cs
+│
+└── Services/
+└── CartService.cs
+```
+
+```
+Customers/
+│
+├── Abstractions/
+│   └── ICustomerService.cs
+│
+├── DTOs/
+│   └── CustomerDto.cs
+│
+├── Mappings/
+│   └── CustomerMappings.cs
+│
+└── Services/
+└── CustomerService.cs
+```
+
+```
+Orders/
+│
+├── Abstractions/
+│   ├── IOrderRepository.cs
+│   ├── IOrderService.cs
+│   ├── IPaymentService.cs
+│   ├── INotificationService.cs
+│   └── PaymentResult.cs
+│
+├── DTOs/
+│   ├── OrderDto.cs
+│   └── OrderItemDto.cs
+│
+├── Mappings/
+│   └── OrderMappings.cs
+│
+└── Services/
+└── OrderService.cs
+```
+
+
+In the `OrderService`, rather than re-implementing the functionality that's in `Presentation`, we can instead depend on the abstractions we've defined in the `IPaymentService` and `INotificationService`.
+
+Note that most of the logic we need already exists in controllers and services in the `Presentation` project. We can use this for defining our abstractions, and for some of the repositories, and we will fix a couple of bugs along the way. Specifically, in the `CartService`, we'll update the cart total any time items are added and removed, and in all services we will ensure we are saving changes to the database. This means that we can simply copy and paste the code in the controllers and services in the `Presentation` folder and refactor as we go. To see the complete implementation, you can look at the code in the LasagneCommerce folder.
+
+</details>

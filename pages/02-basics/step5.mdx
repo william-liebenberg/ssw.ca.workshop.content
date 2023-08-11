@@ -1,0 +1,26 @@
+# Step 5: Implement Infrastructure services
+We've added some abstractions in `Application` that define requirements our application logic depends on. But these are infrastructure concerns, so we will implement these in our `Infrastructure` project.
+
+1. In the `Infrastructure` project, create a folder called `Repositories`.
+2. In this folder, create the `ProductRepository`. (Bonus:  `CartRepository`, `OrderRepository`)
+    - Note there is not `CustomerRepository`. We can add this later, but for now, YAGNI.
+3. Make each of these depend on their respective interfaces, and implement the functionality.
+    - You can see complete implementations in the `LasagneCommerce` solution.
+4. In the `Infrastructure` project, create a folder called `Services`.
+
+<details>
+
+<summary>Bonus</summary>
+
+5. In this folder, create the `EmailService` and `PaymentService`. These should depend on the `INotificationService` and `IPaymentService` respectively.
+6. Implement the functionality required by these services.
+    - Note these are dummy services for illustration. You can see sample implementations in the `LasagneCommerce` solution.
+    - For now, these services more or less just replicate the functionality that was in the `OrderService` in the `Presentation` project, with the main difference being a return type in the `PaymentResult` service.
+
+</details>
+
+This completes most of the code changes for the `Infrastructure` project, but before we move on to the final steps of cleaning up the `Presentation` project and wiring up all our dependencies, we need to add an EF migration to reflect the new schema. In a terminal, navigate to the `Infrastructure` folder and enter the following command:
+
+```bash
+dotnet ef migrations add RefactorToLasagne -s ../Presentation
+```

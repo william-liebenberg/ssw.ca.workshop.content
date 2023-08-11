@@ -1,0 +1,24 @@
+# Step 1: Separate the solution into layers
+
+It's difficult to maintain code, and more importantly enforce the direction of dependencies, when all your code is in one project. We'll separate SpaghettiCommerce into four layers:
+* Presentation
+* Infrastructure
+* Application
+* Domain
+
+`Domain` is at the center, surrounded by `Application`. `Domain` and `Application` together represent Core. `Infrastructure` and `Presentation` both occupy the next layer, and all dependencies point inward. This means `Domain` has no external dependencies, `Application` depends on `Domain`, and `Infrastructure` and `Presentation` both depend on `Application`.
+
+In any refactor like this, you should always start with the Domain, and that's what we'll do here:
+1. Rename the `SpaghettiCommerce` project to `Presentation`.
+2. Add a class library project called `Domain`.
+3. In the `Domain` project add a folder called `Models`.
+4. Move all the models from the `Models` folder in `Presentation` to the `Models` folder in `Domain`.
+
+    > **Warning**
+    > Don't move the Product class from the Products folder just yet (we do this in Step 2)
+
+5. Update the namespaces in all of the classes in the `Models` folder (`SpaghettiCommerce.Models` => `SpaghettiCommerce.Domain.Models`).
+6. Make the `Presentation` project depend on `Domain`.
+7. In the `Presentation` project, update all the references to the models to use the new namespace.
+
+Before we move on, build and run the project to make sure it still works.

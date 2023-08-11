@@ -1,0 +1,25 @@
+{
+  "index": "Introduction",
+  "setup": "Environment Setup",
+  "02-basics": {
+    "title": "Clean Architecture Basics" 
+  },
+  "03-applied": {
+    "title": "Clean Architecture Applied"
+  },
+  "04-testing": {
+    "title": "Clean Testing"
+  },
+  "another": "Another Page",
+  "advanced": "Advanced (A Folder)",
+  "about": {
+    "title": "About",
+    "type": "page"
+  },
+  "contact": {
+    "title": "Contact ↗",
+    "type": "page",
+    "href": "https://twitter.com/william_dotnet",
+    "newWindow": true
+  }
+}
